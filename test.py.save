@@ -1,0 +1,21 @@
+import sys, time, subprocess
+
+start = time.time()
+
+sep = sys.argv[1]
+
+word_path = './word'
+result_path = '
+with open(word_path, 'r') as f:
+	if sep == '0':
+		words = f.read().split('\n')[:-1]
+	else:
+
+result = []
+for word in words:
+	cmd = 'curl http://127.0.0.1:5000/word2vec/sc?word='+word
+	p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+	r = p.wait()
+	result.append(r)
+
+with open(

@@ -1,0 +1,6 @@
+40 words, 50 concepts, 0.2674 seconds.
+
+0.000133 second per word*concept.
+
+if we have 200000 videos, with each owning 20 words, and there are 100 concepts,
+the total duration should be approximately 53200 seconds.
