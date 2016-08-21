@@ -2,6 +2,11 @@
 
 This Server-Client structure is forked from https://github.com/3Top/word2vec-api/blob/master/word2vec-api.py, and was added some functions to satisfy our needs.
 
+* Requirements
+  * flask(for Python2.7)
+  * flask-restful(for Python2.7)
+  * numpy(for Python 2.7 and 3.3)
+
 * Launching Service
 ```
 python nserver.py --model /PATH/TO/MODEL --concept /PATH/TO/CONCEPT [--host host] [--port integer]
