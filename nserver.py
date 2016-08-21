@@ -30,21 +30,42 @@ class Model(Resource):
 			nvs = zip([line[0] for line in lines], [line[1:] for line in lines])
 			self.vec = dict((name, val) for name, val in nvs)
 			# print(self.vec['the'])
-
+	
+	def filter_word(self, word):
+		if word in self.vocab:
+			return True
+		else:
+			return False
+	
 	def similarity(self, word1, word2):
-		word1 = self.vec[str(word1)]
-		word2 = self.vec[str(word2)]
+		# flag = self.filter_word(word1) && self.filter_word(word2)
+		# if flag == True:
+		try:
+			word1 = self.vec[str(word1)]
+			word2 = self.vec[str(word2)]
+		# else:
+		except BaseException:
+			return 0
 		return cosine_similarity(word1, word2)
 
+	
 	def most_similar_concept(self, word, concept):
-		word = self.vec[str(word)]
+		# flag = self.filter_word(word)
+		# if flag == True:
+		try:
+			word = self.vec[str(word)]
+		except BaseException:
+			return 0
 		type_vec = np.asarray([cosine_similarity(word, attr) for attr in concept.vec])
 		return(concept.vocab[type_vec.argmax(0)])
 
-	def similar_concept(self, word, concept):
-		word = self.vec[str(word)]
+	def similarity_concept(self, word, concept):
+		try:
+			word = self.vec[str(word)]
+		except BaseException:
+			return 0
 		type_vec = np.asarray([cosine_similarity(word, attr) for attr in concept.vec])
-		return type_vec
+		return type_vec.tolist()
 
 class Concept(Resource):
 	def __init__(self, path):
@@ -61,13 +82,13 @@ class Most_Similar_Concept(Resource):
 		word = args.get('word')[0]
 		return model.most_similar_concept(word, concept)
 
-class Similar_Concept(Resource):
+class Similarity_Concept(Resource):
 	def get(self):
 		parser = reqparse.RequestParser()
 		parser.add_argument('word', type=str, required=True, action='append')
 		args = parser.parse_args()
 		word = args.get('word')[0]
-		return model.similar_concept(word, concept)
+		return model.similarity_concept(word, concept)
 
 class Similarity(Resource):
 	def get(self):
@@ -86,7 +107,6 @@ class N_Similarity(Resource):
 class Most_Similar(Resource):
 	pass
 
-class 
 
 
 app = Flask(__name__)
@@ -108,7 +128,7 @@ if __name__ == '__main__':
 	concept = Concept(args.concept)
 
 	api.add_resource(Most_Similar_Concept, path+'/msc')
-	api.add_resource(Similar_Concept, path+'/sc')
+	api.add_resource(Similarity_Concept, path+'/sc')
 	app.run(host=host, port=port)
 
 
